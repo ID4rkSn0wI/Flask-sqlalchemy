@@ -13,15 +13,25 @@
 <body>
 <header>
     <table class="bg-light border-0 table table-borderless">
-      <tbody>
-        <tr>
-          <td class="h1 px-4 text-left">Миссия Колонизация Марса</td>
-          <td class="align-middle text-right px-4" style="font-size:20px">Mars One</td>
-        </tr>
-      </tbody>
+        <tbody>
+            <tr>
+                <td class="h1 px-4 text-left">Миссия Колонизация Марса</td>
+                {% if current_user.is_authenticated %}
+                    <td>
+                        <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+                    </td>
+                {% else %}
+                    <td>
+                        <a class="btn btn-primary " href="/register">Register</a>
+                        <a class="btn btn-success" href="/login">Log in</a>
+                    </td>
+                {% endif %}
+                <td class="align-middle text-right px-4" style="font-size:20px">Mars One</td>
+            </tr>
+        </tbody>
     </table>
     <p class="text-black-50 h4 px-4 py-2">
-      И на Марсе будут яблони цвести!
+        И на Марсе будут яблони цвести!
     </p>
 </header>
 <!-- Begin page content -->

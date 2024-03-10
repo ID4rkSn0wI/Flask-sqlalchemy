@@ -2,6 +2,12 @@
 
 {% block content %}
     <h2 class="text-center">Works log</h2>
+    <div>
+        <a href="departments" class="btn btn-secondary">Back to Departments</a>
+        {% if current_user.is_authenticated %}
+            <a href="add_job" class="btn btn-secondary">Add a Job</a>
+        {% endif %}
+    </div>
     {% for item in jobs%}
         <h3>Action # {{ loop.index }}</h3>
         <table class="table">
@@ -10,14 +16,16 @@
                     <td scope="col">Title of activity</td>
                     <td scope="col">Team Leader</td>
                     <td scope="col">Duration</td>
-                    <td scope="col">List of collaborators</td>
+                    <td scope="col">List of <br> collaborators</td>
+                    <td scope="col">Hazard category</td>
                     <td scope="col">Is finished</td>
                 </tr>
                 <tr class="table-primary">
                     <td class="align-middle">{{ item.job }}</td>
-                    <td class="align-middle">{{ item.team_leader }}</td>
+                    <td class="align-middle">{{ item.team_leader_initials }}</td>
                     <td class="align-middle">{{ item.work_size }} hours</td>
                     <td class="align-middle">{{ item.collaborators }}</td>
+                    <td class="align-middle">{{ item.categories_id }}</td>
                     {% if item.is_finished == 0 %}
                         <td class="bg-danger align-middle">Is not<br>finished</td>
                     {% else %}
@@ -26,5 +34,16 @@
                 </tr>
             </tbody>
         </table>
+        {% if current_user.is_authenticated and (current_user.id == item.team_leader_id or current_user.position == "captain") %}
+            <div>
+                <a href="/jobs/{{ item.id }}" class="btn btn-warning">
+                    Edit Job
+                </a>
+                <a href="/jobs_delete/{{ item.id }}" class="btn btn-danger">
+                    Delete Job
+                </a>
+            </div>
+        {% endif %}
+
     {% endfor %}
 {% endblock %}
