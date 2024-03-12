@@ -166,7 +166,7 @@ def add_jobs():
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         job = Jobs()
-        job.title = form.title.data
+        job.job = form.job.data
         job.team_leader_id = form.team_leader_id.data
         job.work_size = form.work_size.data
         job.collaborators = form.collaborators.data
@@ -181,30 +181,39 @@ def add_jobs():
 @app.route('/jobs/<int:idd>', methods=['GET', 'POST'])
 @login_required
 def edit_jobs(idd):
+    print(idd)
     form = JobsForm()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        job = db_sess.query(Jobs).filter(Jobs.id == idd,
-                                          Jobs.team_leader == current_user
-                                          ).first()
+        job = db_sess.query(Jobs).filter(Jobs.id == idd, (Jobs.team_leader == current_user) | (current_user.position == "captain")).first()
         if job:
             form.job.data = job.job
             form.team_leader_id.data = job.team_leader_id
             form.work_size.data = job.work_size
             form.collaborators.data = job.collaborators
+            categories = job.categories
+            ids = []
+            for cat in categories:
+                ids.append(str(cat.id))
+            form.category.data = ', '.join(ids)
             form.is_finished.data = job.is_finished
         else:
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        job = db_sess.query(Jobs).filter(Jobs.id == idd,
-                                          Jobs.team_leader == current_user
-                                          ).first()
+        job = db_sess.query(Jobs).filter(Jobs.id == idd, (Jobs.team_leader == current_user) | (current_user.position == "captain")).first()
         if job:
             job.job = form.job.data
             job.team_leader_id = form.team_leader_id.data
             job.work_size = form.work_size.data
             job.collaborators = form.collaborators.data
+            categories = form.category.data
+            cats = []
+            for idd in categories.split(', '):
+                category = db_sess.query(Category).filter(Category.id == idd).first()
+                cats.append(category)
+            print(cats)
+            job.categories = cats
             job.is_finished = form.is_finished.data
             db_sess.commit()
             return redirect('/')
@@ -220,7 +229,7 @@ def edit_jobs(idd):
 @login_required
 def jobs_delete(idd):
     db_sess = db_session.create_session()
-    jobs = db_sess.query(Jobs).filter(Jobs.id == idd, Jobs.team_leader == current_user).first()
+    jobs = db_sess.query(Jobs).filter(Jobs.id == idd, (Jobs.team_leader == current_user) | (current_user.position == "captain")).first()
     if jobs:
         db_sess.delete(jobs)
         db_sess.commit()
@@ -250,7 +259,7 @@ def add_departments():
         for idd in members_ds:
             members_ids.append(int(idd))
         members = []
-        for member in db_sess.query(User).filter(User.id.in_(members_ids)):
+        for member in db_sess.query(User).get(User.id.in_(members_ids)):
             members.append(member)
         department.members = members
         department.email = form.email.data
@@ -322,5 +331,4 @@ def department_delete(idd):
 
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
-    print()
     app.run(port=5000, host='127.0.0.1')

@@ -10,26 +10,26 @@
     </div>
     {% for item in jobs%}
         <h3>Action # {{ loop.index }}</h3>
-        <table class="table">
+        <table class="border-0 table table-borderless">
             <tbody>
                 <tr class="table-secondary">
-                    <td scope="col">Title of activity</td>
-                    <td scope="col">Team Leader</td>
-                    <td scope="col">Duration</td>
-                    <td scope="col">List of <br> collaborators</td>
-                    <td scope="col">Hazard category</td>
-                    <td scope="col">Is finished</td>
+                    <td class="align-middle" scope="col">Title of activity</td>
+                    <td class="align-middle" scope="col">Team Leader</td>
+                    <td class="align-middle" scope="col">Duration</td>
+                    <td class="align-middle" scope="col">List of <br> collaborators</td>
+                    <td class="align-middle" scope="col">Hazard category</td>
+                    <td class="align-middle" scope="col">Is finished</td>
                 </tr>
-                <tr class="table-primary">
-                    <td class="align-middle">{{ item.job }}</td>
-                    <td class="align-middle">{{ item.team_leader_initials }}</td>
-                    <td class="align-middle">{{ item.work_size }} hours</td>
-                    <td class="align-middle">{{ item.collaborators }}</td>
-                    <td class="align-middle">{{ item.categories_id }}</td>
+                <tr class="">
+                    <td class="table-primary align-middle">{{ item.job }}</td>
+                    <td class="table-primary align-middle">{{ item.team_leader_initials }}</td>
+                    <td class="table-primary align-middle">{{ item.work_size }} hours</td>
+                    <td class="table-primary align-middle">{{ item.collaborators }}</td>
+                    <td class="table-primary align-middle">{{ item.categories_id }}</td>
                     {% if item.is_finished == 0 %}
-                        <td class="bg-danger align-middle">Is not<br>finished</td>
+                        <td class="table-danger align-middle">Is not<br>finished</td>
                     {% else %}
-                        <td class="bg-success align-middle">Finished</td>
+                        <td class="table-success align-middle">Finished</td>
                     {% endif %}
                 </tr>
             </tbody>

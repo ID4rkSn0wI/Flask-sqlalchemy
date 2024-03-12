@@ -10,13 +10,13 @@
     </div>
     {% for item in departments%}
         <h3>Action # {{ loop.index }}</h3>
-        <table class="table">
+        <table class="border-0 table table-borderless">
             <tbody>
                 <tr class="table-secondary">
-                    <td scope="col">Title of department</td>
-                    <td scope="col">Chief</td>
-                    <td scope="col">Members</td>
-                    <td scope="col">Department Email</td>
+                    <td class="align-middle" scope="col">Title of department</td>
+                    <td class="align-middle" scope="col">Chief</td>
+                    <td class="align-middle" scope="col">Members</td>
+                    <td class="align-middle" scope="col">Department Email</td>
                 </tr>
                 <tr class="table-primary">
                     <td class="align-middle">{{ item.title }}</td>
